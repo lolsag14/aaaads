@@ -12,7 +12,8 @@ local watermark = library:AddWatermark('Praroditel hub');
 local mainhome = home:AddSection('Info')
 local Farm2 = Legit:AddSection('Kill Aura')
 local Farm1 = Legit:AddSection('auto collect')
-local aa = aaa:AddSection('Misc ')
+local Farm3 = Legit:AddSection('auto steal')
+local aa = aaa:AddSection('Misc')
 
 mainhome:AddLabel('The script by Praroditel" ')
 mainhome:AddKeyBind('Toggle GUI', Enum.KeyCode.Insert, function() 
@@ -21,7 +22,17 @@ end)
 
 
 
+
+local hitmark = {
+    ["skit"] = "rbxassetid://4817809188",
+    ["Neverlose"] = "rbxassetid://8726881116",
+    ["Rust"]      = "rbxassetid://1255040462",
+    ["Bubble"]    = "rbxassetid://198598793",
+}
+
+
 local lox
+local selectedHitmarkSoundId = hitmark["skit"]
 
 Farm2:AddToggle('kill aura', true, Enum.KeyCode.F, function(state) 
     if state then
@@ -49,11 +60,29 @@ Farm2:AddToggle('kill aura', true, Enum.KeyCode.F, function(state)
                                 table.insert(cute_femboys, v.Character)
                             end
                         end
-                        for _, v2 in cute_femboys do
+                        for _, v2 in ipairs(cute_femboys) do 
                             if v2.PrimaryPart then
                                 tool:Activate()
                                 firetouchinterest(tool.Handle, v2.PrimaryPart, 0)
                                 firetouchinterest(tool.Handle, v2.PrimaryPart, 1)
+
+                                local tool = local_player.Backpack:FindFirstChildOfClass("Tool") or local_player.Character:FindFirstChildOfClass("Tool")
+
+                                if tool then
+                                    local sound = Instance.new("Sound")
+                                    sound.SoundId = selectedHitmarkSoundId
+                                    sound.Volume = 4
+                                    sound.Looped = false
+                                    sound.Parent = tool
+                                    sound.Name = "prarod"
+
+                                    sound:Play()
+
+                                    wait(0.2)
+                                    sound:Destroy()
+                                else
+                                    warn("У игрока нет инструментов в инвентаре или в руках.")
+                                end     
                             end
                         end
                         task.wait(eatDelay)
@@ -68,6 +97,12 @@ Farm2:AddToggle('kill aura', true, Enum.KeyCode.F, function(state)
         end
     end
 end)
+
+
+Farm2:AddDropdown('Hit markerk sound', {'skit', 'Bubble', 'Neverlose', 'Rust'}, 'skit', function(selected)
+    selectedHitmarkSoundId = hitmark[selected] 
+end)
+
 
 local lox
 
@@ -101,7 +136,65 @@ end)
 
 local lox
 
-Farm1:AddToggle('auto pick up SK', true, Enum.KeyCode.C, function(state) 
+Farm3:AddToggle('auto steal all SC', true, Enum.KeyCode.K, function(state) 
+    if state then
+        lox = task.spawn(function()
+            while true do
+                wait(0.2)
+                local player = game.Players.LocalPlayer 
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+                local hel = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+
+
+                if not humanoidRootPart then
+                    warn("HumanoidRootPart не найден")
+                    return
+                end
+
+                local bases = workspace:FindFirstChild("Bases")
+                if bases then
+                    for _, base in ipairs(bases:GetChildren()) do
+                        if base:IsA("Model") then 
+                            print("Найден Base:", base.Name)
+
+                            local slots = base:FindFirstChild("Slots")
+                            if slots then
+                                for _, slot in ipairs(slots:GetChildren()) do
+                                    if slot:IsA("Model") then 
+                                        print("Найден Slot:", slot.Name)
+
+                                        for _, model in ipairs(slot:GetChildren()) do
+                                            if model:IsA("Model") then 
+                                                local hrp = model:FindFirstChild("HumanoidRootPart")
+                                                if hrp then
+
+                                                    humanoidRootPart.CFrame = hrp.CFrame
+                                                    wait(0.2)
+                                                    humanoidRootPart.CFrame = hel
+                                                    break 
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if lox then 
+            task.cancel(lox) 
+            lox = nil
+        end
+    end
+end)
+
+local lox
+
+Farm1:AddToggle('auto pick up SC', true, Enum.KeyCode.C, function(state) 
     if state then
         lox = task.spawn(function()
             while true do
