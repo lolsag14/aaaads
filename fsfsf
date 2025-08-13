@@ -158,10 +158,11 @@ end)
 
 local lox
 
-Farm1:AddToggle('door destroy', true, Enum.KeyCode.X, function(state) 
+Farm1:AddToggle('door destroy', true, Enum.KeyCode.P, function(state) 
     if state then
         lox = task.spawn(function()
             while true do
+                wait(0.5)
                 for _, base in pairs(workspace.Bases:GetChildren()) do
                     if base:FindFirstChild("Doors") then
                         local door = base.Doors:FindFirstChild("Door1")
