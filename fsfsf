@@ -5,12 +5,14 @@ library:ChangeGame("Praroditel HUB")
 
 local home = library:AddWindow('Home')
 local Legit = library:AddWindow('Main')
+local aaa = library:AddWindow('Misc')
 local watermark = library:AddWatermark('Praroditel hub');
 
 
 local mainhome = home:AddSection('Info')
 local Farm2 = Legit:AddSection('Kill Aura')
 local Farm1 = Legit:AddSection('auto collect')
+local aa = aaa:AddSection('Misc ')
 
 mainhome:AddLabel('The script by Praroditel" ')
 mainhome:AddKeyBind('Toggle GUI', Enum.KeyCode.Insert, function() 
@@ -81,9 +83,91 @@ Farm1:AddToggle('auto collect', true, Enum.KeyCode.Z, function(state)
                     local collectZone = base:FindFirstChild("CollectZone")
     
                     if collectZone then
-                        collectZone.Size = Vector3.new(500, 0.1, 500)
+                        collectZone.Size = Vector3.new(500, 2, 500)
+                        collectZone.CanCollide = false
                     else
                         warn("eba ti shirni)))")
+                    end
+                end
+            end
+        end)
+    else
+        if lox then 
+            task.cancel(lox) 
+            lox = nil
+        end
+    end
+end)
+
+local lox
+
+Farm1:AddToggle('auto pick up SK', true, Enum.KeyCode.C, function(state) 
+    if state then
+        lox = task.spawn(function()
+            while true do
+                wait(0.5)
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+                local range = 50
+
+                for _, descendant in ipairs(workspace:GetDescendants()) do
+                    if descendant:IsA("ProximityPrompt") then
+                        local distance = (descendant.Parent.Position - humanoidRootPart.Position).magnitude
+                        if distance <= range then
+                            if fireproximityprompt then
+                                fireproximityprompt(descendant)
+                            else
+                                warn("zozi.")
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        if lox then 
+            task.cancel(lox) 
+            lox = nil
+        end
+    end
+end)
+
+
+local lox
+
+Farm1:AddToggle('prompt cooldown 0', true, Enum.KeyCode.X, function(state) 
+    if state then
+        lox = task.spawn(function()
+            while true do
+                wait(0.2)
+                for i,v in ipairs(game:GetService("Workspace"):GetDescendants()) do
+                    if v.ClassName == "ProximityPrompt" then
+                        v.HoldDuration = 0
+                    end
+                end
+            end
+        end)
+    else
+        if lox then 
+            task.cancel(lox) 
+            lox = nil
+        end
+    end
+end)
+
+local lox
+
+Farm1:AddToggle('door destroy', true, Enum.KeyCode.X, function(state) 
+    if state then
+        lox = task.spawn(function()
+            while true do
+                for _, base in pairs(workspace.Bases:GetChildren()) do
+                    if base:FindFirstChild("Doors") then
+                        local door = base.Doors:FindFirstChild("Door1")
+                        if door then
+                            door:Destroy()
+                        end
                     end
                 end
             end
@@ -109,7 +193,7 @@ Farm2:AddSlider('kill aura delay', 10, 0.1, 0.1,function(value1)
     eatDelay=value1
 end)
 
-Farm1:AddSlider('localplayer Speed', 100, 1, 28,function(Value) 
+aa:AddSlider('localplayer Speed', 100, 1, 28,function(Value) 
     getgenv().WalkSpeedValue = (Value);
     local Player = game:service'Players'.LocalPlayer;
     Player.Character.Humanoid:GetPropertyChangedSignal'WalkSpeed':Connect(function()
