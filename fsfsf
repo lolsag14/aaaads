@@ -24,15 +24,22 @@ end)
 
 
 local hitmark = {
-    ["skit"] = "rbxassetid://4817809188",
-    ["Neverlose"] = "rbxassetid://8726881116",
+    ["TF2"]       = "rbxassetid://8255306220",
+    ["Gamesense"] = "rbxassetid://4817809188",
     ["Rust"]      = "rbxassetid://1255040462",
+    ["Neverlose"] = "rbxassetid://8726881116",
     ["Bubble"]    = "rbxassetid://198598793",
+    ["Quake"]     = "rbxassetid://1455817260",
+    ["Among-Us"]  = "rbxassetid://7227567562",
+    ["Ding"]      = "rbxassetid://2868331684",
+    ["Minecraft"] = "rbxassetid://6361963422",
+    ["Blackout"]  = "rbxassetid://3748776946",
+    ["Osu!"]      = "rbxassetid://7151989073",
 }
 
 
 local lox
-local selectedHitmarkSoundId = hitmark["skit"]
+local selectedHitmarkSoundId = hitmark["Bubble"]
 
 Farm2:AddToggle('kill aura', true, Enum.KeyCode.F, function(state) 
     if state then
@@ -99,7 +106,7 @@ Farm2:AddToggle('kill aura', true, Enum.KeyCode.F, function(state)
 end)
 
 
-Farm2:AddDropdown('Hit markerk sound', {'skit', 'Bubble', 'Neverlose', 'Rust'}, 'skit', function(selected)
+Farm2:AddDropdown('Hit markerk sound', {'skit', 'Bubble', 'Neverlose', 'Rust','Osu!','Blackout','Minecraft','Ding','Among-Us','Quake','TF2'}, 'skit', function(selected)
     selectedHitmarkSoundId = hitmark[selected] 
 end)
 
@@ -295,3 +302,5 @@ aa:AddSlider('localplayer Speed', 100, 1, 28,function(Value)
     end)
     Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue;
 end)
+
+
